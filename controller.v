@@ -8,6 +8,8 @@ module Controller (
     output reg clr_pc,
     output reg inc_pc,
     output reg sel_alu,
+    output reg sel_bus,  // پورت جدید
+    output reg pass_add, // پورت جدید
     output reg ir_on_adr,
     output reg pc_on_adr,
     output reg mem_read,  // برای عملیات Load
@@ -50,10 +52,12 @@ module Controller (
         clr_pc = 0;
         inc_pc = 0;
         sel_alu = 0;
+        sel_bus = 0;    // مقدار پیش‌فرض
+        pass_add = 0;   // مقدار پیش‌فرض
         ir_on_adr = 0;
         pc_on_adr = 0;
-        mem_read = 0;   // پیش‌فرض برای Load
-        mem_write = 0;  // پیش‌فرض برای Store
+        mem_read = 0;
+        mem_write = 0;
 
         case (current_state)
             RESET: begin
@@ -62,7 +66,7 @@ module Controller (
             FETCH: begin
                 ld_pc = 1;
                 pc_on_adr = 1;
-                clr_pc=0;
+                clr_pc = 0;
                 inc_pc = 1; // شمارنده برنامه را افزایش می‌دهد
             end
             DECODE: begin
@@ -74,10 +78,12 @@ module Controller (
                     3'b000: begin // عملیات ADD
                         sel_alu = 1;
                         load_acc = 1;
+                        pass_add = 1; // فعال کردن سیگنال pass_add
                     end
                     3'b001: begin // عملیات LOAD
                         mem_read = 1;
                         load_acc = 1;
+                        sel_bus = 1; // فعال کردن سیگنال sel_bus
                     end
                     3'b010: begin // عملیات STORE
                         mem_write = 1;
