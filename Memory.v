@@ -1,5 +1,4 @@
 module Memory (
-    input clock,
     input reset,          // سیگنال بازنشانی
     input read,           // سیگنال خواندن
     input write,          // سیگنال نوشتن
@@ -19,21 +18,29 @@ module Memory (
         $readmemh("mem.txt", mem); 
     end
 
-    always @(posedge clock or posedge reset) begin
+    // بازنشانی حافظه به صورت آسنکرون
+    always @(reset) begin
         if (reset) begin
-            // بازنشانی حافظه (مقداردهی اولیه به صفر)
             for (i = 0; i < 32; i = i + 1) begin
-                mem[i] <= 8'h00;
+                mem[i] = 8'h00; // مقداردهی صفر
             end
-            data_out <= 8'h00;
-        end else begin
-            if (write) begin
-                mem[address] <= data_in;
-                data_out <= data_in; // داده خروجی مستقیماً از ورودی مقدار می‌گیرد
-                $writememh("mem.txt", mem); // ذخیره تغییرات در فایل
-            end else if (read) begin
-                data_out <= mem[address];
-            end
+            data_out = 8'h00;
         end
     end
+
+    // عملیات نوشتن به صورت آسنکرون
+    always @(write, address, data_in) begin
+        if (write) begin
+            mem[address] = data_in; // ذخیره مقدار در حافظه
+            $writememh("mem.txt", mem); // ذخیره تغییرات در فایل
+        end
+    end
+
+    // عملیات خواندن به صورت آسنکرون
+    always @(read, address) begin
+        if (read) begin
+            data_out = mem[address]; // خواندن مقدار از حافظه
+        end
+    end
+
 endmodule
