@@ -3,11 +3,7 @@ module CPU (
     input reset,
     input [2:0] opcode,
     input [7:0] Data_bus_in,
-    output [7:0] out_acc,
-    output [0:7]outt_IR,
-    output [0:7]outt_PC,
-    output [0:7]outt_AC,
-    output [0:7]outt_ALU
+    output [7:0] out_acc
 );
 
     // سیگنال‌های کنترلی بین Controller و DataPath
@@ -45,12 +41,9 @@ module CPU (
         .ir_on_adr(ir_on_adr),
         .pc_on_adr(pc_on_adr),
         .sel_bus(1'b0), // برای ساده‌سازی فرض شده 0 باشد
-        .pass_add(1'b0), // فرض شده 0 باشد
+        .pass_add(1'b0) // فرض شده 0 باشد
 
-        .outt_IR(outt_IR),
-        .outt_PC(outt_PC),
-        .outt_AC(outt_AC),
-        .outt_ALU(outt_ALU)
+    
 
 
 
