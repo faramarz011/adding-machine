@@ -7,6 +7,7 @@ module Controller (
     output reg ld_pc,
     output reg clr_pc,
     output reg inc_pc,
+    output reg div_pass,
     output reg pass_add, // پورت جدید
     output reg ir_on_adr,
     output reg pc_on_adr,
@@ -54,6 +55,7 @@ module Controller (
         pc_on_adr = 0;
         mem_read = 0;
         mem_write = 0;
+        div_pass=0;
 
         case (current_state)
             RESET: begin
@@ -79,7 +81,6 @@ module Controller (
                     3'b001: begin // عملیات LOAD
                         mem_read = 1;
                         load_acc = 1;
-                        sel_bus = 1; // فعال کردن سیگنال sel_bus
                     end
                     3'b010: begin // عملیات STORE
                         mem_write = 1;

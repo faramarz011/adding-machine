@@ -17,7 +17,7 @@ module DataPath (
     output [7:0] Data_bus_out,
     output [7:0] out_acc,  // خروجی Accumulator
     output [7:0] out_IR,   // خروجی IR
-    output [5:0] out_PC,   // خروجی PC
+    output [5:0] out_PC   // خروجی PC
 );
 
     // سیگنال‌های داخلی
