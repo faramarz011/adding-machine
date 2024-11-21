@@ -3,13 +3,13 @@ module Memory (
     input reset,          // سیگنال بازنشانی
     input read,           // سیگنال خواندن
     input write,          // سیگنال نوشتن
-    input [7:0] address,  // آدرس (فرض می‌کنیم 8 بیت)
-    input [15:0] data_in, // داده ورودی (16 بیت)
-    output reg [15:0] data_out // داده خروجی (16 بیت)
+    input [4:0] address,  // آدرس (5 بیت برای 32 آدرس)
+    input [7:0] data_in,  // داده ورودی (8 بیت)
+    output reg [7:0] data_out // داده خروجی (8 بیت)
 );
 
-    // تعریف حافظه با سایز 256 کلمه 16 بیتی
-    reg [15:0] mem [0:255];
+    // تعریف حافظه با سایز 32 کلمه 8 بیتی
+    reg [7:0] mem [0:31];
 
     // تعریف متغیر شمارنده
     integer i;
@@ -22,10 +22,10 @@ module Memory (
     always @(posedge clock or posedge reset) begin
         if (reset) begin
             // بازنشانی حافظه (مقداردهی اولیه به صفر)
-            for (i = 0; i < 256; i = i + 1) begin
-                mem[i] <= 16'h0000;
+            for (i = 0; i < 32; i = i + 1) begin
+                mem[i] <= 8'h00;
             end
-            data_out <= 16'h0000;
+            data_out <= 8'h00;
         end else begin
             if (write) begin
                 mem[address] <= data_in;

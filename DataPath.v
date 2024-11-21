@@ -12,34 +12,36 @@ module DataPath (
     input inc_pc,
     input ir_on_adr,
     input pc_on_adr,
+
+    output [7:0] Data_bus_out,
     output [7:0] out_acc,  // خروجی Accumulator
     output [7:0] out_IR,   // خروجی IR
     output [5:0] out_PC,   // خروجی PC
-    output [7:0] out_ALU   // خروجی ALU
 );
 
     // سیگنال‌های داخلی
     wire [7:0] a_side;
     wire [7:0] ALU_out;
     wire [5:0] out_pc;
-    wire [7:0] mux1_out;
+   // wire [7:0] mux1_out;
     wire [5:0] mux2_out;
     wire [7:0] IR_out;
 
     // Mux اول برای انتخاب بین ALU و Data_bus_in
-    Mux #(.WIDTH(8)) mux1(
+  /*  Mux #(.WIDTH(8)) mux1(
         .in0(ALU_out),
         .in1(Data_bus_in),
         .sel(sel_alu),
         .sel_bus(sel_bus),
         .out(mux1_out)
     );
+*/
 
     // Accumulator
     Acc acc(
         .clock(clock),
         .reset(reset),
-        .data_in(mux1_out),
+        .data_in(Data_bus_in),
         .load(load_acc),
         .data_out(a_side)
     );
@@ -62,7 +64,7 @@ module DataPath (
         .pass(pass_add),
         .result(ALU_out)
     );
-    assign out_ALU = ALU_out; // اتصال خروجی ALU به پورت out_ALU
+    assign Data_bus_out = ALU_out; // اتصال خروجی ALU به پورت out_ALU
 
     // Program Counter (PC)
     ProgramCounter PC(
