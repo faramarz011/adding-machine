@@ -7,8 +7,6 @@ module Controller (
     output reg ld_pc,
     output reg clr_pc,
     output reg inc_pc,
-    output reg sel_alu,
-    output reg sel_bus,  // پورت جدید
     output reg pass_add, // پورت جدید
     output reg ir_on_adr,
     output reg pc_on_adr,
@@ -51,8 +49,6 @@ module Controller (
         ld_pc = 0;
         clr_pc = 0;
         inc_pc = 0;
-        sel_alu = 0;
-        sel_bus = 0;    // مقدار پیش‌فرض
         pass_add = 0;   // مقدار پیش‌فرض
         ir_on_adr = 0;
         pc_on_adr = 0;
@@ -66,6 +62,8 @@ module Controller (
             FETCH: begin
                 ld_pc = 1;
                 pc_on_adr = 1;
+                load_acc = 1;
+
                 clr_pc = 0;
                 inc_pc = 1; // شمارنده برنامه را افزایش می‌دهد
             end
@@ -76,8 +74,6 @@ module Controller (
             EXECUTE: begin
                 case (opcode)
                     3'b000: begin // عملیات ADD
-                        sel_alu = 1;
-                        load_acc = 1;
                         pass_add = 1; // فعال کردن سیگنال pass_add
                     end
                     3'b001: begin // عملیات LOAD
@@ -87,6 +83,9 @@ module Controller (
                     end
                     3'b010: begin // عملیات STORE
                         mem_write = 1;
+                    end
+                    3'b011: begin // عملیات div
+                        div_pass=1;
                     end
                     default: begin
                         // پیش‌فرض، هیچ عملیاتی انجام نشود
